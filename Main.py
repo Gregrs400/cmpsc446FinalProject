@@ -11,6 +11,10 @@ dataset = pd.read_csv("WA_Fn-UseC_-Telco-Customer-Churn.csv")
 
 # print(dataset.values[0:6])
 
+ds_columns = dataset.columns.tolist()
+for column in ds_columns:
+    print(f"{column} unique values : {dataset[column].unique()}")
+
 plt.style.use("ggplot")
 plt.figure(figsize=(5, 5))
 ax = sns.countplot(x="Churn", hue="Churn", data=dataset, palette="Blues", legend=False)
@@ -25,6 +29,8 @@ for container in ax.containers:
 # print(dataset.columns[5])
 
 print(dataset.describe())
+
+print(dataset.dtypes)
 
 # Change TotalCharges to float
 dataset["TotalCharges"] = pd.to_numeric(dataset["TotalCharges"], errors="coerce")
