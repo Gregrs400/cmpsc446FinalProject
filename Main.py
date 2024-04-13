@@ -7,28 +7,61 @@ import math
 
 dataset = pd.read_csv("WA_Fn-UseC_-Telco-Customer-Churn.csv")
 
-print(dataset.columns)
+# print(dataset.columns)
 
-print(dataset.values[0:6])
-
-# Apply the ggplot style
+# print(dataset.values[0:6])
 
 plt.style.use("ggplot")
 plt.figure(figsize=(5, 5))
-ax = sns.countplot(x=dataset["Churn"], palette="Blues")
-ax.bar_label(ax.containers[0])
-plt.show()
+ax = sns.countplot(x="Churn", hue="Churn", data=dataset, palette="Blues", legend=False)
 
-print(dataset.columns[5])
+# Adding count labels above the bars
+for container in ax.containers:
+    ax.bar_label(container, label_type='center')
 
-firstCol = []
+# plt.show()
 
-for row in dataset.values:
-    row = list(row)
-    firstCol.append(row[5])
 
-plt.hist(firstCol, density=True, bins=10)
-plt.xlabel('Tenure (years)')
-plt.ylabel('Fraction (per year)')
-plt.title('Histogram of Employee Tenure')
-plt.show()
+# print(dataset.columns[5])
+
+print(dataset.describe())
+
+# Change TotalCharges to float
+dataset["TotalCharges"] = pd.to_numeric(dataset["TotalCharges"], errors="coerce")
+
+
+def histogram_plots(df, numerical_values, target):
+    number_of_columns = 2
+    number_of_rows = math.ceil(len(numerical_values) / 2)
+
+    fig = plt.figure(figsize=(12, 5 * number_of_rows))
+
+    for index, column in enumerate(numerical_values, 1):
+        ax = fig.add_subplot(number_of_rows, number_of_columns, index)
+        ax = sns.kdeplot(df[column][df[target] == "Yes"], fill=True)
+        ax = sns.kdeplot(df[column][df[target] == "No"], fill=True)
+        ax.set_title(column)
+        ax.legend(["Churn", "No Churn"], loc='upper right')
+    plt.savefig("numerical_variables.png", dpi=300)
+    return plt.show()
+
+
+customer_account_num = ["tenure", "MonthlyCharges", "TotalCharges"]
+histogram_plots(dataset, customer_account_num, "Churn")
+
+
+def outlier_check_boxplot(df, numerical_values):
+    number_of_columns = 2
+    number_of_rows = math.ceil(len(numerical_values) / 2)
+
+    fig = plt.figure(figsize=(12, 5 * number_of_rows))
+    for index, column in enumerate(numerical_values, 1):
+        ax = fig.add_subplot(number_of_rows, number_of_columns, index)
+        ax = sns.boxplot(x=column, data=df, palette="Blues")
+        ax.set_title(column)
+    plt.savefig("Outliers_check.png", dpi=300)
+    return plt.show()
+
+
+numerical_values = ["tenure", "MonthlyCharges", "TotalCharges"]
+outlier_check_boxplot(dataset, numerical_values)
