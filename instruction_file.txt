@@ -1,0 +1,21 @@
+Prerequisites:
+Make sure you have Python installed on your system. You can download it from python.org.
+Install required Python libraries by running:
+pip install pandas seaborn matplotlib scikit-learn
+Download the Dataset:
+Download the dataset file WA_Fn-UseC_-Telco-Customer-Churn.csv.
+Code Setup:
+Place the dataset file (WA_Fn-UseC_-Telco-Customer-Churn.csv) in the same directory as the Python script.
+Copy the provided code into a Python script file (e.g., customer_churn_analysis.py) using a text editor or an integrated development environment (IDE).
+Run the Script:
+Open a terminal or command prompt.
+Navigate to the directory where the Python script and dataset file are located.
+Run the Python script using the following command:
+python customer_churn_analysis.py
+Interpret the Results:
+The script will generate various visualizations and output the results of different machine learning models used for predicting customer churn.
+Check the directory for saved images containing visualizations (e.g., churnGraphs folder).
+Review the printed results in the terminal or command prompt.
+Optional Modifications:
+You can modify the code to experiment with different preprocessing techniques, machine learning algorithms, or evaluation metrics.
+Customize the code to suit your specific requirements or dataset characteristics.

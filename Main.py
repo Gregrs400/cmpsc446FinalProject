@@ -248,7 +248,7 @@ def precision_recall_curve_and_scores(X_test, y_test, y_pred, y_pred_probabiliti
     y_pred_prob = y_pred_probabilities[:, 1]
     precision, recall, thresholds = precision_recall_curve(y_test, y_pred_prob)
     plt.plot(recall, precision, label=f"{classifier_name}")
-    plt.title(f"{classifier_name}-ROC Curve")
+    plt.title(f"{classifier_name}-PR Curve")
     plt.xlabel("Recall")
     plt.ylabel("Precision")
     plt.show()
