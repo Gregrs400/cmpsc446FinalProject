@@ -50,6 +50,7 @@ dataset.dropna(inplace=True)
 # Remove customer id column
 dataset = dataset.iloc[:, 1:]
 
+
 # Histograms for numerical columns
 def histogram_plots(data_set, numerical_values, target):
     number_of_columns = 2
@@ -65,8 +66,10 @@ def histogram_plots(data_set, numerical_values, target):
     plt.savefig("numerical_variables.png", dpi=300)
     return plt.show()
 
+
 numerical_values = ["tenure", "MonthlyCharges", "TotalCharges"]
 histogram_plots(dataset, numerical_values, "Churn")
+
 
 # Boxplots to check for outliers
 def outlier_check_boxplot(data_set, numerical_values):
@@ -81,8 +84,10 @@ def outlier_check_boxplot(data_set, numerical_values):
     plt.savefig("Outliers_check.png", dpi=300)
     return plt.show()
 
+
 numerical_values = ["tenure", "MonthlyCharges", "TotalCharges"]
 outlier_check_boxplot(dataset, numerical_values)
+
 
 # Churn graphs based on each categorical column
 def churn_countplot(column):
@@ -90,6 +95,7 @@ def churn_countplot(column):
     plt.figure(figsize=(5, 5))
     ax = sns.countplot(x=column, hue='Churn', data=dataset, palette='Blues', legend=True)
     plt.savefig(f"churnGraphs\\{column}Churn.png", dpi=300)
+
 
 churn_columns = ['MultipleLines', 'gender', 'SeniorCitizen', 'Partner', 'Dependents',
                  'PhoneService', 'InternetService', 'OnlineSecurity', 'OnlineBackup',
@@ -133,6 +139,7 @@ y = dataset['Churn']
 # Split data into train and test sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
+
 # Define functions for evaluation
 def feature_weights(X_df, classifier, classifier_name):
     weights = pd.Series(classifier.coef_[0], index=X_df.columns.values).sort_values(ascending=False)
@@ -147,6 +154,7 @@ def feature_weights(X_df, classifier, classifier_name):
     bottom_10_weights.plot(kind="bar")
     print("")
 
+
 def confusion_matrix_plot(X_train, y_train, X_test, y_test, y_pred, classifier, classifier_name):
     cm = confusion_matrix(y_pred, y_test)
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=["No Churn", "Churn"])
@@ -156,6 +164,7 @@ def confusion_matrix_plot(X_train, y_train, X_test, y_test, y_pred, classifier, 
     print(f"Accuracy Score Test = {accuracy_score(y_pred, y_test)}")
     print(f"Accuracy Score Train = {classifier.score(X_train, y_train)}")
     return print("\n")
+
 
 def roc_curve_auc_score(X_test, y_test, y_pred_probabilities, classifier_name):
     y_pred_prob = y_pred_probabilities[:, 1]
@@ -169,6 +178,7 @@ def roc_curve_auc_score(X_test, y_test, y_pred_probabilities, classifier_name):
     plt.show()
     return print(f"AUC Score (ROC):{roc_auc_score(y_test, y_pred_prob)}")
 
+
 def precision_recall_curve_and_scores(X_test, y_test, y_pred, y_pred_probabilities, classifier_name):
     y_pred_prob = y_pred_probabilities[:, 1]
     precision, recall, thresholds = precision_recall_curve(y_test, y_pred_prob)
@@ -179,6 +189,7 @@ def precision_recall_curve_and_scores(X_test, y_test, y_pred, y_pred_probabiliti
     plt.show()
     f1_score_result, auc_score = f1_score(y_test, y_pred), auc(recall, precision)
     return print(f"f1 Score : {f1_score_result} \n AUC Score (PR) : {auc_score}")
+
 
 # K-Nearest Neighbors
 knn = KNeighborsClassifier()
@@ -198,6 +209,7 @@ y_pred_logreg_proba = logreg.predict_proba(X_test)
 feature_weights(X_train, logreg, "Logistic Regression")
 print("\n---------- Results for Logistic Regression ----------")
 confusion_matrix_plot(X_train, y_train, X_test, y_test, y_pred_logreg, logreg, "Logistic Regression")
+roc_curve_auc_score(X_test, y_test, y_pred_logreg_proba, "Logistic Regression")
 precision_recall_curve_and_scores(X_test, y_test, y_pred_knn, y_pred_logreg_proba, "Logistic Regression")
 
 # Decision Tree
@@ -209,4 +221,3 @@ print("\n---------- Results for Decision Tree ----------")
 confusion_matrix_plot(X_train, y_train, X_test, y_test, y_pred_decision_tree, decision_tree, "Decision Tree")
 roc_curve_auc_score(X_test, y_test, y_pred_decision_tree_proba, "Decision Tree")
 precision_recall_curve_and_scores(X_test, y_test, y_pred_decision_tree, y_pred_decision_tree_proba, "Decision Tree")
-
