@@ -1,14 +1,11 @@
 import pandas as pd
-import numpy as np
-import matplotlib.ticker as mtick
 import seaborn as sns
 import matplotlib.pyplot as plt
 import math
-from sklearn.preprocessing import OneHotEncoder, MinMaxScaler
-from sklearn.model_selection import train_test_split, RandomizedSearchCV
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, confusion_matrix, classification_report, roc_curve, roc_auc_score
-from sklearn.metrics import precision_recall_curve, auc, f1_score, ConfusionMatrixDisplay, precision_score, recall_score
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, confusion_matrix, roc_curve, roc_auc_score
+from sklearn.metrics import precision_recall_curve, auc, f1_score, ConfusionMatrixDisplay
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
@@ -33,7 +30,7 @@ plt.figure(figsize=(5, 5))
 ax = sns.countplot(x="Churn", hue="Churn", data=dataset, palette="Blues", legend=False)
 for container in ax.containers:
     ax.bar_label(container, label_type='center')
-plt.show()
+plt.savefig("churnGraphs\\churnedvsnot.png", dpi=300)
 
 # Important statistics about senior citizens, tenure, and monthly charges
 print(dataset.describe())
@@ -71,7 +68,7 @@ numerical_values = ["tenure", "MonthlyCharges", "TotalCharges"]
 histogram_plots(dataset, numerical_values, "Churn")
 
 
-# Boxplots to check for outliers
+# Box plots to check for outliers
 def outlier_check_boxplot(data_set, numerical_values):
     number_of_columns = 2
     number_of_rows = math.ceil(len(numerical_values) / 2)
@@ -89,22 +86,6 @@ numerical_values = ["tenure", "MonthlyCharges", "TotalCharges"]
 outlier_check_boxplot(dataset, numerical_values)
 
 
-# Churn graphs based on each categorical column
-def churn_countplot(column):
-    plt.style.use("ggplot")
-    plt.figure(figsize=(5, 5))
-    ax = sns.countplot(x=column, hue='Churn', data=dataset, palette='Blues', legend=True)
-    plt.savefig(f"churnGraphs\\{column}Churn.png", dpi=300)
-
-
-churn_columns = ['MultipleLines', 'gender', 'SeniorCitizen', 'Partner', 'Dependents',
-                 'PhoneService', 'InternetService', 'OnlineSecurity', 'OnlineBackup',
-                 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies',
-                 'Contract', 'PaperlessBilling', 'PaymentMethod']
-
-for column in churn_columns:
-    churn_countplot(column)
-
 # Correlation of "Churn" with other variables
 dataset['Churn'].replace(to_replace='Yes', value=1, inplace=True)
 dataset['Churn'].replace(to_replace='No', value=0, inplace=True)
@@ -113,7 +94,91 @@ plt.figure(figsize=(15, 8))
 dataset_dummies.corr()['Churn'].sort_values(ascending=False).plot(kind='bar')
 plt.savefig("churnCorrelation.png", dpi=300)
 
-# Machine Learning Phase
+
+# ------------ Graphs showing Churn rates for different useful attributes ------------
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='MultipleLines', hue='Churn', data=dataset, palette='Blues', legend=True)
+plt.savefig("churnGraphs\\MultipleLinesChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='gender', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\genderChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='SeniorCitizen', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\SeniorCitizenChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='Partner', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\PartnerChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='Dependents', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\DependentsChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='PhoneService', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\PhoneServiceChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='InternetService', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\InternetServiceChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='OnlineSecurity', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\OnlineSecurityChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='OnlineBackup', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\OnlineBackupChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='DeviceProtection', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\DeviceProtectionChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='TechSupport', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\TechSupportChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='StreamingTV', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\StreamingTVChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='StreamingMovies', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\StreamingMoviesChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='Contract', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\ContractChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='PaperlessBilling', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\PaperlessBillingChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='PaymentMethod', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\PaymentMethodChurn.png", dpi=300)
+
+
+# ------------------------ Machine Learning Phase (testing and training) ------------------------
+
 # Identify categorical columns
 categorical_cols = dataset.select_dtypes(include=['category', 'object']).columns
 
@@ -222,84 +287,3 @@ confusion_matrix_plot(X_train, y_train, X_test, y_test, y_pred_decision_tree, de
 roc_curve_auc_score(X_test, y_test, y_pred_decision_tree_proba, "Decision Tree")
 precision_recall_curve_and_scores(X_test, y_test, y_pred_decision_tree, y_pred_decision_tree_proba, "Decision Tree")
 
-# Graphs showing Churn rates for different useful attributes
-
-plt.style.use("ggplot")
-plt.figure(figsize=(5, 5))
-ax = sns.countplot(x='MultipleLines', hue='Churn', data=dataset, palette='Blues', legend=True)
-plt.savefig("churnGraphs\\MultipleLinesChurn.png", dpi=300)
-
-plt.style.use("ggplot")
-plt.figure(figsize=(5, 5))
-ax = sns.countplot(x='gender', hue='Churn', data=dataset, palette="Blues", legend=True)
-plt.savefig("churnGraphs\\genderChurn.png", dpi=300)
-
-plt.style.use("ggplot")
-plt.figure(figsize=(5, 5))
-ax = sns.countplot(x='SeniorCitizen', hue='Churn', data=dataset, palette="Blues", legend=True)
-plt.savefig("churnGraphs\\SeniorCitizenChurn.png", dpi=300)
-
-plt.style.use("ggplot")
-plt.figure(figsize=(5, 5))
-ax = sns.countplot(x='Partner', hue='Churn', data=dataset, palette="Blues", legend=True)
-plt.savefig("churnGraphs\\PartnerChurn.png", dpi=300)
-
-plt.style.use("ggplot")
-plt.figure(figsize=(5, 5))
-ax = sns.countplot(x='Dependents', hue='Churn', data=dataset, palette="Blues", legend=True)
-plt.savefig("churnGraphs\\DependentsChurn.png", dpi=300)
-
-plt.style.use("ggplot")
-plt.figure(figsize=(5, 5))
-ax = sns.countplot(x='PhoneService', hue='Churn', data=dataset, palette="Blues", legend=True)
-plt.savefig("churnGraphs\\PhoneServiceChurn.png", dpi=300)
-
-plt.style.use("ggplot")
-plt.figure(figsize=(5, 5))
-ax = sns.countplot(x='InternetService', hue='Churn', data=dataset, palette="Blues", legend=True)
-plt.savefig("churnGraphs\\InternetServiceChurn.png", dpi=300)
-
-plt.style.use("ggplot")
-plt.figure(figsize=(5, 5))
-ax = sns.countplot(x='OnlineSecurity', hue='Churn', data=dataset, palette="Blues", legend=True)
-plt.savefig("churnGraphs\\OnlineSecurityChurn.png", dpi=300)
-
-plt.style.use("ggplot")
-plt.figure(figsize=(5, 5))
-ax = sns.countplot(x='OnlineBackup', hue='Churn', data=dataset, palette="Blues", legend=True)
-plt.savefig("churnGraphs\\OnlineBackupChurn.png", dpi=300)
-
-plt.style.use("ggplot")
-plt.figure(figsize=(5, 5))
-ax = sns.countplot(x='DeviceProtection', hue='Churn', data=dataset, palette="Blues", legend=True)
-plt.savefig("churnGraphs\\DeviceProtectionChurn.png", dpi=300)
-
-plt.style.use("ggplot")
-plt.figure(figsize=(5, 5))
-ax = sns.countplot(x='TechSupport', hue='Churn', data=dataset, palette="Blues", legend=True)
-plt.savefig("churnGraphs\\TechSupportChurn.png", dpi=300)
-
-plt.style.use("ggplot")
-plt.figure(figsize=(5, 5))
-ax = sns.countplot(x='StreamingTV', hue='Churn', data=dataset, palette="Blues", legend=True)
-plt.savefig("churnGraphs\\StreamingTVChurn.png", dpi=300)
-
-plt.style.use("ggplot")
-plt.figure(figsize=(5, 5))
-ax = sns.countplot(x='StreamingMovies', hue='Churn', data=dataset, palette="Blues", legend=True)
-plt.savefig("churnGraphs\\StreamingMoviesChurn.png", dpi=300)
-
-plt.style.use("ggplot")
-plt.figure(figsize=(5, 5))
-ax = sns.countplot(x='Contract', hue='Churn', data=dataset, palette="Blues", legend=True)
-plt.savefig("churnGraphs\\ContractChurn.png", dpi=300)
-
-plt.style.use("ggplot")
-plt.figure(figsize=(5, 5))
-ax = sns.countplot(x='PaperlessBilling', hue='Churn', data=dataset, palette="Blues", legend=True)
-plt.savefig("churnGraphs\\PaperlessBillingChurn.png", dpi=300)
-
-plt.style.use("ggplot")
-plt.figure(figsize=(5, 5))
-ax = sns.countplot(x='PaymentMethod', hue='Churn', data=dataset, palette="Blues", legend=True)
-plt.savefig("churnGraphs\\PaymentMethodChurn.png", dpi=300)
