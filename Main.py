@@ -74,7 +74,7 @@ def outlier_check_boxplot(data_set, numerical_values):
     fig = plt.figure(figsize=(12, 5 * number_of_rows))
     for index, column in enumerate(numerical_values, 1):
         ax = fig.add_subplot(number_of_rows, number_of_columns, index)
-        ax = sns.boxplot(x=column, data=data_set, palette="Blues")
+        ax = sns.boxplot(x=column, hue=0, data=data_set, palette="Blues", legend=False)
         ax.set_title(column)
     plt.savefig("Outliers_check.png", dpi=300)
     return plt.show()
