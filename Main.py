@@ -221,3 +221,85 @@ print("\n---------- Results for Decision Tree ----------")
 confusion_matrix_plot(X_train, y_train, X_test, y_test, y_pred_decision_tree, decision_tree, "Decision Tree")
 roc_curve_auc_score(X_test, y_test, y_pred_decision_tree_proba, "Decision Tree")
 precision_recall_curve_and_scores(X_test, y_test, y_pred_decision_tree, y_pred_decision_tree_proba, "Decision Tree")
+
+# Graphs showing Churn rates for different useful attributes
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='MultipleLines', hue='Churn', data=dataset, palette='Blues', legend=True)
+plt.savefig("churnGraphs\\MultipleLinesChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='gender', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\genderChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='SeniorCitizen', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\SeniorCitizenChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='Partner', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\PartnerChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='Dependents', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\DependentsChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='PhoneService', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\PhoneServiceChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='InternetService', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\InternetServiceChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='OnlineSecurity', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\OnlineSecurityChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='OnlineBackup', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\OnlineBackupChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='DeviceProtection', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\DeviceProtectionChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='TechSupport', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\TechSupportChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='StreamingTV', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\StreamingTVChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='StreamingMovies', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\StreamingMoviesChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='Contract', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\ContractChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='PaperlessBilling', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\PaperlessBillingChurn.png", dpi=300)
+
+plt.style.use("ggplot")
+plt.figure(figsize=(5, 5))
+ax = sns.countplot(x='PaymentMethod', hue='Churn', data=dataset, palette="Blues", legend=True)
+plt.savefig("churnGraphs\\PaymentMethodChurn.png", dpi=300)
