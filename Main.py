@@ -7,10 +7,12 @@ import math
 
 dataset = pd.read_csv("WA_Fn-UseC_-Telco-Customer-Churn.csv")
 
-
 # These are the different columns in our dataset
 # print(dataset.columns)
 
+
+# Types of data that we have (identify the columns that we have and their types)
+print(dataset.dtypes)
 
 # First 6 data entries
 # print(dataset.values[0:6])
@@ -19,7 +21,12 @@ dataset = pd.read_csv("WA_Fn-UseC_-Telco-Customer-Churn.csv")
 # Unique values (ex. for male category: male, female)
 ds_columns = dataset.columns.tolist()
 for column in ds_columns:
-    print(f"{column} unique values : {dataset[column].unique()}")
+    if dataset[column].dtypes != 'int64' and dataset[column].dtypes != 'float64':
+        print(f'{column} : {dataset[column].unique()}')
+
+
+# Remove (automatic) for payment method (redundant information)
+dataset["PaymentMethod"] = dataset["PaymentMethod"].str.replace(" (automatic)", "", regex=False)
 
 
 # Displays the number of people who churned or didn't in bar graph
@@ -31,17 +38,24 @@ for container in ax.containers:
     ax.bar_label(container, label_type='center')
 plt.show()
 
-
 # Important statistics about senior citizens, tenure, and monthly charges
 print(dataset.describe())
 
-
-# Types of data that we have
-print(dataset.dtypes)
-
-
 # Change TotalCharges to float (instead of object)
 dataset["TotalCharges"] = pd.to_numeric(dataset["TotalCharges"], errors="coerce")
+
+# Search for nulls
+print(dataset.isnull().sum())
+
+# Eliminate nulls
+dataset.dropna(inplace=True)
+# print(dataset.isnull().sum()) # No nulls now
+
+# Remove customer id because it's useless
+dataset = dataset.iloc[:, 1:]
+
+
+# print(dataset.dtypes) # Customer id is removed
 
 
 # Function to create a histogram
@@ -61,7 +75,7 @@ def histogram_plots(data_set, numerical_values, target):
     return plt.show()
 
 
-# Histogram for churn based on these categories
+# Histogram for churn based on these categories (numerical)
 customer_account_num = ["tenure", "MonthlyCharges", "TotalCharges"]
 histogram_plots(dataset, customer_account_num, "Churn")
 
@@ -80,9 +94,12 @@ def outlier_check_boxplot(data_set, numerical_values):
     return plt.show()
 
 
-# Outlier in these categories
+# Outlier for the numerical categories
 numerical_values = ["tenure", "MonthlyCharges", "TotalCharges"]
 outlier_check_boxplot(dataset, numerical_values)
+
+# ****************** A series of churn graphs based on each of the remaining categories ******************
+
 
 plt.style.use("ggplot")
 plt.figure(figsize=(5, 5))
@@ -163,3 +180,16 @@ plt.style.use("ggplot")
 plt.figure(figsize=(5, 5))
 ax = sns.countplot(x='PaymentMethod', hue='Churn', data=dataset, palette="Blues", legend=True)
 plt.savefig("churnGraphs\\PaymentMethodChurn.png", dpi=300)
+
+# Get Correlation of "Churn" with other variables:
+# We need to convert churn to a numerical value, so we're doing 0 for no and 1 for yes
+
+dataset['Churn'].replace(to_replace='Yes', value=1, inplace=True)
+dataset['Churn'].replace(to_replace='No', value=0, inplace=True)
+dataset_dummies = pd.get_dummies(dataset)
+plt.figure(figsize=(15, 8))
+dataset_dummies.corr()['Churn'].sort_values(ascending=False).plot(kind='bar')
+plt.savefig("churnCorrelation.png", dpi=300)
+# plt.show()
+
+
